@@ -7,25 +7,25 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class SpendCategory {
+public class DiversityClassification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String name;
+    private String code;
 
     private String description;
 
     private Boolean active = true;
 
-    public SpendCategory() {
+    public DiversityClassification() {
     }
 
-    public SpendCategory(Long id, String name, String description, Boolean active) {
+    public DiversityClassification(Long id, String code, String description, Boolean active) {
         this.id = id;
-        this.name = name;
+        this.code = code;
         this.description = description;
         this.active = active;
     }
@@ -38,12 +38,12 @@ public class SpendCategory {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getCode() {
+        return code;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getDescription() {
