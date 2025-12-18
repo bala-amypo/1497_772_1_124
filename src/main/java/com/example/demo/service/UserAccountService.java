@@ -6,5 +6,5 @@ public interface UserAccountService {
 
     UserAccount register(UserAccount user);
 
-    UserAccount findByEmailOrThrow(String email);
+    UserAccount findByEmail(String email);
 }
