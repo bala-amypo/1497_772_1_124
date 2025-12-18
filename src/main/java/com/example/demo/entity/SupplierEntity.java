@@ -1,1 +1,3 @@
-public class SupplierEntity
+public class SupplierEntity{
+    
+}
