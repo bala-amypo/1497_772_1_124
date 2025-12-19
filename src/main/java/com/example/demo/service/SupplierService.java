@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import java.util.List;
 
-import com.example.demo.entity.Supplier;
+import com.example.demo.Entity.Supplier;
 
 public interface SupplierService {
 
