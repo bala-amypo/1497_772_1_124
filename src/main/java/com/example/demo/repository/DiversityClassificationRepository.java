@@ -1,11 +1,13 @@
 package com.example.demo.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.Entity.DiversityClassification;
+import com.example.demo.entity.DiversityClassification;
 
 public interface DiversityClassificationRepository
         extends JpaRepository<DiversityClassification, Long> {
 
-    boolean existsByCode(String code);
+    List<DiversityClassification> findByActiveTrue();
 }
