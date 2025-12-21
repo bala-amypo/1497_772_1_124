@@ -1,8 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.LoginRequest;
-import com.example.demo.dto.RegisterRequest;
-import com.example.demo.dto.JwtResponse;
 import com.example.demo.entity.UserAccount;
 import com.example.demo.exception.UnauthorizedException;
 import com.example.demo.security.JwtUtil;
@@ -14,6 +11,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -33,13 +32,7 @@ public class AuthController {
     }
     
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest registerRequest) {
-        UserAccount userAccount = new UserAccount();
-        userAccount.setFullName(registerRequest.getFullName());
-        userAccount.setEmail(registerRequest.getEmail());
-        userAccount.setPassword(registerRequest.getPassword());
-        userAccount.setRole(registerRequest.getRole());
-        
+    public ResponseEntity<Map<String, Object>> register(@RequestBody UserAccount userAccount) {
         UserAccount registeredUser = userAccountService.register(userAccount);
         
         String token = jwtUtil.generateToken(
@@ -48,29 +41,28 @@ public class AuthController {
             registeredUser.getRole()
         );
         
-        JwtResponse response = new JwtResponse(
-            token,
-            registeredUser.getId(),
-            registeredUser.getEmail(),
-            registeredUser.getRole()
-        );
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", registeredUser.getId());
+        response.put("email", registeredUser.getEmail());
+        response.put("role", registeredUser.getRole());
         
         return ResponseEntity.ok(response);
     }
     
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest) {
         try {
+            String email = loginRequest.get("email");
+            String password = loginRequest.get("password");
+            
             Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginRequest.getEmail(),
-                    loginRequest.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(email, password)
             );
             
             SecurityContextHolder.getContext().setAuthentication(authentication);
             
-            UserAccount userAccount = userAccountService.findByEmailOrThrow(loginRequest.getEmail());
+            UserAccount userAccount = userAccountService.findByEmailOrThrow(email);
             
             String token = jwtUtil.generateToken(
                 userAccount.getId(),
@@ -78,12 +70,11 @@ public class AuthController {
                 userAccount.getRole()
             );
             
-            JwtResponse response = new JwtResponse(
-                token,
-                userAccount.getId(),
-                userAccount.getEmail(),
-                userAccount.getRole()
-            );
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("userId", userAccount.getId());
+            response.put("email", userAccount.getEmail());
+            response.put("role", userAccount.getRole());
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
