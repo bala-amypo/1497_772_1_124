@@ -50,9 +50,7 @@ public class Supplier {
         updatedAt = LocalDateTime.now();
     }
     
-    // Constructors
-    public Supplier() {
-    }
+    public Supplier() {}
     
     public Supplier(String name, String email, String registrationNumber) {
         this.name = name;
@@ -61,75 +59,30 @@ public class Supplier {
     }
     
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     
-    public String getName() {
-        return name;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
     
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getRegistrationNumber() { return registrationNumber; }
+    public void setRegistrationNumber(String registrationNumber) { this.registrationNumber = registrationNumber; }
     
-    public String getEmail() {
-        return email;
-    }
+    public Boolean getIsActive() { return isActive; }
+    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
     
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
     
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
+    public Set<DiversityClassification> getDiversityClassifications() { return diversityClassifications; }
+    public void setDiversityClassifications(Set<DiversityClassification> diversityClassifications) { this.diversityClassifications = diversityClassifications; }
     
-    public Boolean getIsActive() {
-        return isActive;
-    }
-    
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-    
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-    
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-    
-    public Set<DiversityClassification> getDiversityClassifications() {
-        return diversityClassifications;
-    }
-    
-    public void setDiversityClassifications(Set<DiversityClassification> diversityClassifications) {
-        this.diversityClassifications = diversityClassifications;
-    }
-    
-    public Set<PurchaseOrder> getPurchaseOrders() {
-        return purchaseOrders;
-    }
-    
-    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
-        this.purchaseOrders = purchaseOrders;
-    }
+    public Set<PurchaseOrder> getPurchaseOrders() { return purchaseOrders; }
+    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) { this.purchaseOrders = purchaseOrders; }
 }

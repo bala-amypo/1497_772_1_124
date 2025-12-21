@@ -35,9 +35,7 @@ public class DiversityClassification {
         }
     }
     
-    // Constructors
-    public DiversityClassification() {
-    }
+    public DiversityClassification() {}
     
     public DiversityClassification(String code, String description) {
         this.code = code;
@@ -45,51 +43,21 @@ public class DiversityClassification {
     }
     
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
     
-    public String getCode() {
-        return code;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
     
-    public void setCode(String code) {
-        this.code = code;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
     
-    public String getDescription() {
-        return description;
-    }
+    public Set<Supplier> getSuppliers() { return suppliers; }
+    public void setSuppliers(Set<Supplier> suppliers) { this.suppliers = suppliers; }
     
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Boolean getActive() {
-        return active;
-    }
-    
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-    
-    public Set<Supplier> getSuppliers() {
-        return suppliers;
-    }
-    
-    public void setSuppliers(Set<Supplier> suppliers) {
-        this.suppliers = suppliers;
-    }
-    
-    public Set<DiversityTarget> getDiversityTargets() {
-        return diversityTargets;
-    }
-    
-    public void setDiversityTargets(Set<DiversityTarget> diversityTargets) {
-        this.diversityTargets = diversityTargets;
-    }
+    public Set<DiversityTarget> getDiversityTargets() { return diversityTargets; }
+    public void setDiversityTargets(Set<DiversityTarget> diversityTargets) { this.diversityTargets = diversityTargets; }
 }
