@@ -1,89 +1,82 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "diversity_targets")
 public class DiversityTarget {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private int targetYear;
-
+    
+    @Column(name = "target_year", nullable = false)
+    private Integer targetYear;
+    
+    @Column(name = "target_percentage", nullable = false)
     private Double targetPercentage;
-
-    private Boolean active;
-
-    @ManyToOne
-    @JoinColumn(name = "classification_id")
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classification_id", nullable = false)
     private DiversityClassification classification;
-
+    
+    private Boolean active;
+    
+    @PrePersist
+    @PreUpdate
+    protected void onSave() {
+        if (active == null) {
+            active = true;
+        }
+    }
+    
+    // Constructors
     public DiversityTarget() {
     }
-
-    public DiversityTarget(int targetYear,
-                           DiversityClassification classification,
-                           Double targetPercentage) {
+    
+    public DiversityTarget(Integer targetYear, DiversityClassification classification, Double targetPercentage) {
         this.targetYear = targetYear;
         this.classification = classification;
         this.targetPercentage = targetPercentage;
     }
-
-    @PrePersist
-    public void preSave() {
-        if (this.active == null) {
-            this.active = true;
-        }
-    }
-
-    // getters & setters
-
+    
+    // Getters and Setters
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
-
-    public int getTargetYear() {
+    
+    public Integer getTargetYear() {
         return targetYear;
     }
-
-    public void setTargetYear(int targetYear) {
+    
+    public void setTargetYear(Integer targetYear) {
         this.targetYear = targetYear;
     }
-
+    
     public Double getTargetPercentage() {
         return targetPercentage;
     }
-
+    
     public void setTargetPercentage(Double targetPercentage) {
         this.targetPercentage = targetPercentage;
     }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
+    
     public DiversityClassification getClassification() {
         return classification;
     }
-
+    
     public void setClassification(DiversityClassification classification) {
         this.classification = classification;
+    }
+    
+    public Boolean getActive() {
+        return active;
+    }
+    
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }
