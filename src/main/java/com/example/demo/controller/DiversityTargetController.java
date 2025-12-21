@@ -1,34 +1,39 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.entity.DiversityTarget;
 import com.example.demo.service.DiversityTargetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/targets")
 public class DiversityTargetController {
-
-    private final DiversityTargetService service;
-
-    public DiversityTargetController(DiversityTargetService service) {
-        this.service = service;
+    
+    private final DiversityTargetService diversityTargetService;
+    
+    @Autowired
+    public DiversityTargetController(DiversityTargetService diversityTargetService) {
+        this.diversityTargetService = diversityTargetService;
     }
-
+    
     @PostMapping
-    public DiversityTarget create(@RequestBody DiversityTarget target) {
-        return service.createTarget(target);
+    public ResponseEntity<DiversityTarget> createTarget(@RequestBody DiversityTarget target) {
+        DiversityTarget createdTarget = diversityTargetService.createTarget(target);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTarget);
     }
-
+    
     @GetMapping("/year/{year}")
-    public List<DiversityTarget> getByYear(@PathVariable int year) {
-        return service.getTargetsByYear(year);
+    public ResponseEntity<List<DiversityTarget>> getTargetsByYear(@PathVariable int year) {
+        List<DiversityTarget> targets = diversityTargetService.getTargetsByYear(year);
+        return ResponseEntity.ok(targets);
     }
-
+    
     @PutMapping("/{id}/deactivate")
-    public void deactivate(@PathVariable Long id) {
-        service.deactivateTarget(id);
+    public ResponseEntity<Void> deactivateTarget(@PathVariable Long id) {
+        diversityTargetService.deactivateTarget(id);
+        return ResponseEntity.ok().build();
     }
 }
