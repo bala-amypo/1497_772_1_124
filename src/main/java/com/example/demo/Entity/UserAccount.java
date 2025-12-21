@@ -1,15 +1,16 @@
 package com.example.demo.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "user_accounts")
 public class UserAccount {
 
     @Id
@@ -18,21 +19,38 @@ public class UserAccount {
 
     private String fullName;
 
-    @Column(unique = true)
     private String email;
 
     private String password;
 
-    private String role = "USER";
+    private String role;
 
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    @PrePersist
-    public void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
+    public UserAccount() {
     }
 
-    public UserAccount() {}
+    public UserAccount(Long id, String fullName,
+                       String email, String password,
+                       String role) {
+        this.id = id;
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.role == null) {
+            this.role = "USER";
+        }
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
+
+    // getters & setters
 
     public Long getId() {
         return id;
@@ -74,7 +92,11 @@ public class UserAccount {
         this.role = role;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }

@@ -1,55 +1,67 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Entity.DiversityTarget;
+import com.example.demo.entity.DiversityClassification;
+import com.example.demo.entity.DiversityTarget;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.DiversityClassificationRepository;
 import com.example.demo.repository.DiversityTargetRepository;
+import com.example.demo.service.DiversityTargetService;
 
 @Service
-public class DiversityTargetServiceImpl implements DiversityTargetService {
+public class DiversityTargetServiceImpl
+        implements DiversityTargetService {
 
-    @Autowired
-    DiversityTargetRepository repo;
+    private final DiversityTargetRepository targetRepository;
+    private final DiversityClassificationRepository classificationRepository;
+
+    public DiversityTargetServiceImpl(
+            DiversityTargetRepository targetRepository,
+            DiversityClassificationRepository classificationRepository) {
+
+        this.targetRepository = targetRepository;
+        this.classificationRepository = classificationRepository;
+    }
 
     @Override
     public DiversityTarget createTarget(DiversityTarget target) {
-        return repo.save(target);
-    }
 
-    @Override
-    public DiversityTarget updateTarget(Long id, DiversityTarget target) {
-        DiversityTarget existing = repo.findById(id).orElse(null);
-
-        if (existing != null) {
-            existing.setTargetYear(target.getTargetYear());
-            existing.setClassification(target.getClassification());
-            existing.setTargetPercentage(target.getTargetPercentage());
-            return repo.save(existing);
+        if (target.getTargetPercentage() == null ||
+                target.getTargetPercentage() < 0 ||
+                target.getTargetPercentage() > 100) {
+            throw new BadRequestException(
+                    "Target percentage must be between 0 and 100");
         }
-        return null;
+
+        DiversityClassification classification =
+                classificationRepository.findById(
+                        target.getClassification().getId())
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Classification not found"));
+
+        target.setClassification(classification);
+
+        return targetRepository.save(target);
     }
 
     @Override
-    public List<DiversityTarget> getTargetsByYear(Integer year) {
-        return repo.findByTargetYear(year);
+    public List<DiversityTarget> getTargetsByYear(int year) {
+        return targetRepository.findByTargetYear(year);
     }
 
     @Override
-    public List<DiversityTarget> getAllTargets() {
-        return repo.findAll();
-    }
+    public void deactivateTarget(Long id) {
+        DiversityTarget target = targetRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Target not found with id " + id));
 
-    @Override
-    public DiversityTarget deactivateTarget(Long id) {
-        DiversityTarget target = repo.findById(id).orElse(null);
-
-        if (target != null) {
-            target.setActive(false);
-            return repo.save(target);
-        }
-        return null;
+        target.setActive(false);
+        targetRepository.save(target);
     }
 }
