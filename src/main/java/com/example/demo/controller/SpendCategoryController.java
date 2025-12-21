@@ -2,46 +2,28 @@ package com.example.demo.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.Entity.SpendCategory;
+import com.example.demo.entity.SpendCategory;
 import com.example.demo.service.SpendCategoryService;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/categories")
 public class SpendCategoryController {
 
-    @Autowired
-    SpendCategoryService categoryService;
+    private final SpendCategoryService service;
 
-   
-    @PostMapping
-    public SpendCategory create(@RequestBody SpendCategory category) {
-        return categoryService.createCategory(category);
+    public SpendCategoryController(SpendCategoryService service) {
+        this.service = service;
     }
 
-   
-    @PutMapping("/{id}")
-    public SpendCategory update(@PathVariable Long id, @RequestBody SpendCategory category) {
-        return categoryService.updateCategory(id, category);
-    }
-
-   
-    @GetMapping("/{id}")
-    public SpendCategory getById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id);
-    }
-
-    
     @GetMapping
     public List<SpendCategory> getAll() {
-        return categoryService.getAllCategories();
+        return service.getAllCategories();
     }
 
-  
     @PutMapping("/{id}/deactivate")
-    public SpendCategory deactivate(@PathVariable Long id) {
-        return categoryService.deactivateCategory(id);
+    public void deactivate(@PathVariable Long id) {
+        service.deactivateCategory(id);
     }
 }

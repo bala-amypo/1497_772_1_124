@@ -1,54 +1,37 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Entity.SpendCategory;
+import com.example.demo.entity.SpendCategory;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.SpendCategoryRepository;
+import com.example.demo.service.SpendCategoryService;
 
 @Service
-public class SpendCategoryServiceImpl implements SpendCategoryService {
+public class SpendCategoryServiceImpl
+        implements SpendCategoryService {
 
-    @Autowired
-    SpendCategoryRepository categoryRepo;
+    private final SpendCategoryRepository repository;
 
-    @Override
-    public SpendCategory createCategory(SpendCategory category) {
-        return categoryRepo.save(category);
-    }
-
-    @Override
-    public SpendCategory updateCategory(Long id, SpendCategory category) {
-        SpendCategory existing = categoryRepo.findById(id).orElse(null);
-
-        if (existing != null) {
-            existing.setName(category.getName());
-            existing.setDescription(category.getDescription());
-            return categoryRepo.save(existing);
-        }
-        return null;
-    }
-
-    @Override
-    public SpendCategory getCategoryById(Long id) {
-        return categoryRepo.findById(id).orElse(null);
+    public SpendCategoryServiceImpl(SpendCategoryRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public List<SpendCategory> getAllCategories() {
-        return categoryRepo.findAll();
+        return repository.findAll();
     }
 
     @Override
-    public SpendCategory deactivateCategory(Long id) {
-        SpendCategory category = categoryRepo.findById(id).orElse(null);
+    public void deactivateCategory(Long id) {
+        SpendCategory category = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Category not found with id " + id));
 
-        if (category != null) {
-            category.setActive(false);
-            return categoryRepo.save(category);
-        }
-        return null;
+        category.setActive(false);
+        repository.save(category);
     }
 }

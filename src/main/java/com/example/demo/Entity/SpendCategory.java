@@ -1,34 +1,46 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
-import jakarta.persistence.Column;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "spend_categories")
 public class SpendCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String name;
 
-    private String description;
+    private Boolean active;
 
-    private Boolean active = true;
+    @OneToMany(mappedBy = "category")
+    private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
 
     public SpendCategory() {
     }
 
-    public SpendCategory(Long id, String name, String description, Boolean active) {
-        this.id = id;
+    public SpendCategory(String name) {
         this.name = name;
-        this.description = description;
-        this.active = active;
     }
+
+    @PrePersist
+    public void preSave() {
+        if (this.active == null) {
+            this.active = true;
+        }
+    }
+
+    // getters & setters
 
     public Long getId() {
         return id;
@@ -46,19 +58,19 @@ public class SpendCategory {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Boolean getActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<PurchaseOrder> getPurchaseOrders() {
+        return purchaseOrders;
+    }
+
+    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
+        this.purchaseOrders = purchaseOrders;
     }
 }
