@@ -1,35 +1,52 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "purchase_orders")
 public class PurchaseOrder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String poNumber;
-
-    @ManyToOne
-    private Supplier supplier;
-
-    @ManyToOne
-    private SpendCategory category;
 
     private BigDecimal amount;
 
-    @Temporal(TemporalType.DATE)
-    private Date dateIssued;
+    private LocalDate dateIssued;
 
-    private String approvedBy;
     private String notes;
 
-    public PurchaseOrder() {}
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private SpendCategory category;
+
+    public PurchaseOrder() {
+    }
+
+    public PurchaseOrder(String poNumber, BigDecimal amount,
+                         LocalDate dateIssued, Supplier supplier,
+                         SpendCategory category) {
+        this.poNumber = poNumber;
+        this.amount = amount;
+        this.dateIssued = dateIssued;
+        this.supplier = supplier;
+        this.category = category;
+    }
 
     // getters & setters
 
@@ -49,6 +66,30 @@ public class PurchaseOrder {
         this.poNumber = poNumber;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public LocalDate getDateIssued() {
+        return dateIssued;
+    }
+
+    public void setDateIssued(LocalDate dateIssued) {
+        this.dateIssued = dateIssued;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
     public Supplier getSupplier() {
         return supplier;
     }
@@ -63,37 +104,5 @@ public class PurchaseOrder {
 
     public void setCategory(SpendCategory category) {
         this.category = category;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public Date getDateIssued() {
-        return dateIssued;
-    }
-
-    public void setDateIssued(Date dateIssued) {
-        this.dateIssued = dateIssued;
-    }
-
-    public String getApprovedBy() {
-        return approvedBy;
-    }
-
-    public void setApprovedBy(String approvedBy) {
-        this.approvedBy = approvedBy;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
     }
 }
