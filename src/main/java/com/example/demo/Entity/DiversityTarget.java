@@ -1,39 +1,51 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "diversity_targets")
 public class DiversityTarget {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer targetYear;
-
-    @ManyToOne
-    private DiversityClassification classification;
+    private int targetYear;
 
     private Double targetPercentage;
 
-    private Boolean active = true;
+    private Boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "classification_id")
+    private DiversityClassification classification;
 
     public DiversityTarget() {
     }
 
-    public DiversityTarget(Long id, Integer targetYear,
+    public DiversityTarget(int targetYear,
                            DiversityClassification classification,
-                           Double targetPercentage, Boolean active) {
-        this.id = id;
+                           Double targetPercentage) {
         this.targetYear = targetYear;
         this.classification = classification;
         this.targetPercentage = targetPercentage;
-        this.active = active;
     }
+
+    @PrePersist
+    public void preSave() {
+        if (this.active == null) {
+            this.active = true;
+        }
+    }
+
+    // getters & setters
 
     public Long getId() {
         return id;
@@ -43,20 +55,12 @@ public class DiversityTarget {
         this.id = id;
     }
 
-    public Integer getTargetYear() {
+    public int getTargetYear() {
         return targetYear;
     }
 
-    public void setTargetYear(Integer targetYear) {
+    public void setTargetYear(int targetYear) {
         this.targetYear = targetYear;
-    }
-
-    public DiversityClassification getClassification() {
-        return classification;
-    }
-
-    public void setClassification(DiversityClassification classification) {
-        this.classification = classification;
     }
 
     public Double getTargetPercentage() {
@@ -73,5 +77,13 @@ public class DiversityTarget {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public DiversityClassification getClassification() {
+        return classification;
+    }
+
+    public void setClassification(DiversityClassification classification) {
+        this.classification = classification;
     }
 }
