@@ -27,44 +27,22 @@ public class SpendCategory {
         }
     }
     
-    // Constructors
-    public SpendCategory() {
-    }
+    public SpendCategory() {}
     
     public SpendCategory(String name) {
         this.name = name;
     }
     
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     
-    public String getName() {
-        return name;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
     
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public Boolean getActive() {
-        return active;
-    }
-    
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-    
-    public Set<PurchaseOrder> getPurchaseOrders() {
-        return purchaseOrders;
-    }
-    
-    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
-        this.purchaseOrders = purchaseOrders;
-    }
+    public Set<PurchaseOrder> getPurchaseOrders() { return purchaseOrders; }
+    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) { this.purchaseOrders = purchaseOrders; }
 }

@@ -30,9 +30,7 @@ public class PurchaseOrder {
     @JoinColumn(name = "category_id", nullable = false)
     private SpendCategory category;
     
-    // Constructors
-    public PurchaseOrder() {
-    }
+    public PurchaseOrder() {}
     
     public PurchaseOrder(String poNumber, BigDecimal amount, LocalDate dateIssued, Supplier supplier, SpendCategory category) {
         this.poNumber = poNumber;
@@ -43,59 +41,24 @@ public class PurchaseOrder {
     }
     
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getPoNumber() { return poNumber; }
+    public void setPoNumber(String poNumber) { this.poNumber = poNumber; }
     
-    public String getPoNumber() {
-        return poNumber;
-    }
+    public BigDecimal getAmount() { return amount; }
+    public void setAmount(BigDecimal amount) { this.amount = amount; }
     
-    public void setPoNumber(String poNumber) {
-        this.poNumber = poNumber;
-    }
+    public LocalDate getDateIssued() { return dateIssued; }
+    public void setDateIssued(LocalDate dateIssued) { this.dateIssued = dateIssued; }
     
-    public BigDecimal getAmount() {
-        return amount;
-    }
+    public String getNotes() { return notes; }
+    public void setNotes(String notes) { this.notes = notes; }
     
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+    public Supplier getSupplier() { return supplier; }
+    public void setSupplier(Supplier supplier) { this.supplier = supplier; }
     
-    public LocalDate getDateIssued() {
-        return dateIssued;
-    }
-    
-    public void setDateIssued(LocalDate dateIssued) {
-        this.dateIssued = dateIssued;
-    }
-    
-    public String getNotes() {
-        return notes;
-    }
-    
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-    
-    public Supplier getSupplier() {
-        return supplier;
-    }
-    
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-    }
-    
-    public SpendCategory getCategory() {
-        return category;
-    }
-    
-    public void setCategory(SpendCategory category) {
-        this.category = category;
-    }
+    public SpendCategory getCategory() { return category; }
+    public void setCategory(SpendCategory category) { this.category = category; }
 }

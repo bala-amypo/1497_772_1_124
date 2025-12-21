@@ -29,9 +29,7 @@ public class DiversityTarget {
         }
     }
     
-    // Constructors
-    public DiversityTarget() {
-    }
+    public DiversityTarget() {}
     
     public DiversityTarget(Integer targetYear, DiversityClassification classification, Double targetPercentage) {
         this.targetYear = targetYear;
@@ -40,43 +38,18 @@ public class DiversityTarget {
     }
     
     // Getters and Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Integer getTargetYear() { return targetYear; }
+    public void setTargetYear(Integer targetYear) { this.targetYear = targetYear; }
     
-    public Integer getTargetYear() {
-        return targetYear;
-    }
+    public Double getTargetPercentage() { return targetPercentage; }
+    public void setTargetPercentage(Double targetPercentage) { this.targetPercentage = targetPercentage; }
     
-    public void setTargetYear(Integer targetYear) {
-        this.targetYear = targetYear;
-    }
+    public DiversityClassification getClassification() { return classification; }
+    public void setClassification(DiversityClassification classification) { this.classification = classification; }
     
-    public Double getTargetPercentage() {
-        return targetPercentage;
-    }
-    
-    public void setTargetPercentage(Double targetPercentage) {
-        this.targetPercentage = targetPercentage;
-    }
-    
-    public DiversityClassification getClassification() {
-        return classification;
-    }
-    
-    public void setClassification(DiversityClassification classification) {
-        this.classification = classification;
-    }
-    
-    public Boolean getActive() {
-        return active;
-    }
-    
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
+    public Boolean getActive() { return active; }
+    public void setActive(Boolean active) { this.active = active; }
 }
