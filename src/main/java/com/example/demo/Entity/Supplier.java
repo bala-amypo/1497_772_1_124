@@ -1,51 +1,65 @@
-package com.example.demo.Entity;
+package com.example.demo.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "suppliers")
 public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
     private String name;
 
-    @Column(unique = true)
-    private String registrationNumber;
-
-    @Column(unique = true, nullable = false)
     private String email;
 
-    private String phone;
+    private String registrationNumber;
 
-    private String address;
+    private Boolean isActive;
 
-    // Simple field instead of relation
-    private String diversityClassification;
+    private LocalDateTime createdAt;
 
-    private Boolean isActive = true;
+    private LocalDateTime updatedAt;
 
-    private Timestamp createdAt;
+    @ManyToMany(mappedBy = "suppliers")
+    private Set<DiversityClassification> diversityClassifications = new HashSet<>();
 
-    private Timestamp updatedAt;
+    @OneToMany(mappedBy = "supplier")
+    private Set<PurchaseOrder> purchaseOrders = new HashSet<>();
+
+    public Supplier() {
+    }
+
+    public Supplier(Long id, String name, String email, String registrationNumber) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.registrationNumber = registrationNumber;
+    }
 
     @PrePersist
-    public void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
+    public void prePersist() {
+        if (this.isActive == null) {
+            this.isActive = true;
+        }
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
     }
 
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = new Timestamp(System.currentTimeMillis());
-    }
-
-    public Supplier() {}
-
-    // Getters & Setters
+    // getters and setters
 
     public Long getId() {
         return id;
@@ -63,14 +77,6 @@ public class Supplier {
         this.name = name;
     }
 
-    public String getRegistrationNumber() {
-        return registrationNumber;
-    }
-
-    public void setRegistrationNumber(String registrationNumber) {
-        this.registrationNumber = registrationNumber;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -79,28 +85,12 @@ public class Supplier {
         this.email = email;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getRegistrationNumber() {
+        return registrationNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getDiversityClassification() {
-        return diversityClassification;
-    }
-
-    public void setDiversityClassification(String diversityClassification) {
-        this.diversityClassification = diversityClassification;
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
     }
 
     public Boolean getIsActive() {
@@ -111,12 +101,35 @@ public class Supplier {
         this.isActive = isActive;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-}
 
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Set<DiversityClassification> getDiversityClassifications() {
+        return diversityClassifications;
+    }
+
+    public void setDiversityClassifications(Set<DiversityClassification> diversityClassifications) {
+        this.diversityClassifications = diversityClassifications;
+    }
+
+    public Set<PurchaseOrder> getPurchaseOrders() {
+        return purchaseOrders;
+    }
+
+    public void setPurchaseOrders(Set<PurchaseOrder> purchaseOrders) {
+        this.purchaseOrders = purchaseOrders;
+    }
+}
