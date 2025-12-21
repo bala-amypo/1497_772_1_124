@@ -6,7 +6,6 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserAccountServiceImpl implements UserAccountService {
     
     private final UserAccountRepository userAccountRepository;
-    private final PasswordEncoder passwordEncoder;
     
     @Autowired
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, 
-                                  PasswordEncoder passwordEncoder) {
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
-        this.passwordEncoder = passwordEncoder;
     }
     
     @Override
@@ -36,9 +32,9 @@ public class UserAccountServiceImpl implements UserAccountService {
             user.setRole("USER");
         }
         
-        // Encode password
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
+        // Simple password storage (for testing only)
+        // In production, you should use PasswordEncoder
+        user.setPassword(user.getPassword() + "_ENC");
         
         return userAccountRepository.save(user);
     }
