@@ -21,6 +21,11 @@ public class DiversityTargetController {
     
     @PostMapping
     public ResponseEntity<DiversityTarget> createTarget(@RequestBody DiversityTarget target) {
+        // Simple validation
+        if (target.getTargetPercentage() > 100) {
+            return ResponseEntity.badRequest().build();
+        }
+        
         DiversityTarget createdTarget = diversityTargetService.createTarget(target);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTarget);
     }
