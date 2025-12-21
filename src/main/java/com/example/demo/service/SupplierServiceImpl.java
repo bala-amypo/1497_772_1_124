@@ -1,59 +1,45 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.Entity.Supplier;
+import com.example.demo.entity.Supplier;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.SupplierRepository;
+import com.example.demo.service.SupplierService;
 
 @Service
 public class SupplierServiceImpl implements SupplierService {
 
-    @Autowired
-    SupplierRepository repo;
+    private final SupplierRepository supplierRepository;
 
-    @Override
-    public Supplier createSupplier(Supplier supplier) {
-        return repo.save(supplier);
+    public SupplierServiceImpl(SupplierRepository supplierRepository) {
+        this.supplierRepository = supplierRepository;
     }
 
     @Override
-    public Supplier updateSupplier(Long id, Supplier supplier) {
-        Supplier existing = repo.findById(id).orElse(null);
-
-        if (existing != null) {
-            existing.setName(supplier.getName());
-            existing.setRegistrationNumber(supplier.getRegistrationNumber());
-            existing.setEmail(supplier.getEmail());
-            existing.setPhone(supplier.getPhone());
-            existing.setAddress(supplier.getAddress());
-            existing.setDiversityClassification(
-                    supplier.getDiversityClassification());
-            return repo.save(existing);
-        }
-        return null;
+    public Supplier createSupplier(Supplier supplier) {
+        return supplierRepository.save(supplier);
     }
 
     @Override
     public Supplier getSupplierById(Long id) {
-        return repo.findById(id).orElse(null);
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Supplier not found with id " + id));
     }
 
     @Override
     public List<Supplier> getAllSuppliers() {
-        return repo.findAll();
+        return supplierRepository.findAll();
     }
 
     @Override
-    public Supplier deactivateSupplier(Long id) {
-        Supplier supplier = repo.findById(id).orElse(null);
-
-        if (supplier != null) {
-            supplier.setIsActive(false);
-            return repo.save(supplier);
-        }
-        return null;
+    public void deactivateSupplier(Long id) {
+        Supplier supplier = getSupplierById(id);
+        supplier.setIsActive(false);
+        supplier.setUpdatedAt(LocalDateTime.now());
+        supplierRepository.save(supplier);
     }
 }
