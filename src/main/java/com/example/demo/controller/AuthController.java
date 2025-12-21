@@ -1,37 +1,46 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.service.UserAccountService;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Autowired
-    UserAccountService service;
+    private final UserAccountService userService;
 
-    @PostMapping("/register")
-    public UserAccount register(@RequestBody UserAccount user) {
-        return service.register(user);
+    public AuthController(UserAccountService userService) {
+        this.userService = userService;
     }
 
-   
+    // REGISTER
+    @PostMapping("/register")
+    public UserAccount register(@RequestBody UserAccount user) {
+        return userService.register(user);
+    }
+
+    // LOGIN (plain email + password check)
     @PostMapping("/login")
-    public String login(@RequestBody UserAccount request) {
+    public Map<String, String> login(@RequestBody UserAccount user) {
 
-        UserAccount user = service.findByEmail(request.getEmail());
+        UserAccount dbUser =
+                userService.findByEmailOrThrow(user.getEmail());
 
-        if (user == null) {
-            return "User not found";
+        if (!dbUser.getPassword().equals(user.getPassword())) {
+            throw new BadRequestException("Invalid email or password");
         }
 
-        if (user.getPassword().equals(request.getPassword() + "_ENC")) {
-            return "Login Successful";
-        } else {
-            return "Invalid Credentials";
-        }
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Login successful");
+        response.put("email", dbUser.getEmail());
+        response.put("role", dbUser.getRole());
+
+        return response;
     }
 }
