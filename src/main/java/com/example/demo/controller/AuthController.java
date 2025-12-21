@@ -19,18 +19,15 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // REGISTER
     @PostMapping("/register")
     public UserAccount register(@RequestBody UserAccount user) {
         return userService.register(user);
     }
 
-    // LOGIN (plain email + password check)
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody UserAccount user) {
 
-        UserAccount dbUser =
-                userService.findByEmailOrThrow(user.getEmail());
+        UserAccount dbUser = userService.findByEmailOrThrow(user.getEmail());
 
         if (!dbUser.getPassword().equals(user.getPassword())) {
             throw new BadRequestException("Invalid email or password");
