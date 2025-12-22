@@ -19,9 +19,11 @@ public class DiversityClassification {
     private Boolean active;
     
     @ManyToMany(mappedBy = "diversityClassifications")
+     @JsonIgnore 
     private Set<Supplier> suppliers = new HashSet<>();
     
     @OneToMany(mappedBy = "classification", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<DiversityTarget> diversityTargets = new HashSet<>();
     
     @PrePersist

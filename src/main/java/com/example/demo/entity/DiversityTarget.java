@@ -1,9 +1,11 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "diversity_targets")
+@JsonIgnoreProperties({"classification.suppliers", "classification.diversityTargets"}) // Add this
 public class DiversityTarget {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +23,7 @@ public class DiversityTarget {
     
     private Boolean active;
     
+  
     @PrePersist
     @PreUpdate
     protected void onSave() {
