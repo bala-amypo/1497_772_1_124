@@ -1,8 +1,7 @@
 package com.example.demo.repository;
-import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.entity.SpendCategory;
-import java.util.List;
 
-public interface SpendCategoryRepository extends JpaRepository<SpendCategory, Long> {
-    List<SpendCategory> findByActiveTrue();
+import com.example.demo.entity.DiversityClassification;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface DiversityClassificationRepository extends JpaRepository<DiversityClassification, Long> {
 }
