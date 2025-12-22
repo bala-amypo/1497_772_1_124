@@ -25,6 +25,12 @@ public class DiversityClassificationServiceImpl implements DiversityClassificati
     }
     
     @Override
+    public DiversityClassification getClassificationById(Long id) {
+        return classificationRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Diversity classification not found with id: " + id));
+    }
+    
+    @Override
     @Transactional
     public void deactivateClassification(Long id) {
         DiversityClassification classification = classificationRepository.findById(id)
