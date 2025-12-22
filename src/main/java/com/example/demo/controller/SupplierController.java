@@ -1,35 +1,33 @@
 package com.example.demo.controller;
+
 import com.example.demo.entity.Supplier;
 import com.example.demo.service.SupplierService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/suppliers")
 public class SupplierController {
-    private final SupplierService supplierService;
 
-    public SupplierController(SupplierService supplierService) {
-        this.supplierService = supplierService;
+    private final SupplierService service;
+
+    public SupplierController(SupplierService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public Supplier createSupplier(@RequestBody Supplier supplier) {
-        return supplierService.createSupplier(supplier);
+    public Supplier save(@RequestBody Supplier supplier) {
+        return service.save(supplier);
     }
 
     @GetMapping("/{id}")
-    public Supplier getSupplierById(@PathVariable Long id) {
-        return supplierService.getSupplierById(id);
+    public Supplier getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 
     @GetMapping
-    public List<Supplier> getAllSuppliers() {
-        return supplierService.getAllSuppliers();
-    }
-
-    @PutMapping("/{id}/deactivate")
-    public void deactivateSupplier(@PathVariable Long id) {
-        supplierService.deactivateSupplier(id);
+    public List<Supplier> getAll() {
+        return service.getAll();
     }
 }

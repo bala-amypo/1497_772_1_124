@@ -1,30 +1,33 @@
 package com.example.demo.controller;
+
 import com.example.demo.entity.DiversityTarget;
 import com.example.demo.service.DiversityTargetService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/targets")
 public class DiversityTargetController {
-    private final DiversityTargetService diversityTargetService;
 
-    public DiversityTargetController(DiversityTargetService diversityTargetService) {
-        this.diversityTargetService = diversityTargetService;
+    private final DiversityTargetService service;
+
+    public DiversityTargetController(DiversityTargetService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public DiversityTarget createTarget(@RequestBody DiversityTarget target) {
-        return diversityTargetService.createTarget(target);
+    public DiversityTarget save(@RequestBody DiversityTarget target) {
+        return service.save(target);
     }
 
-    @GetMapping("/year/{year}")
-    public List<DiversityTarget> getTargetsByYear(@PathVariable int year) {
-        return diversityTargetService.getTargetsByYear(year);
+    @GetMapping("/{id}")
+    public DiversityTarget getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 
-    @PutMapping("/{id}/deactivate")
-    public void deactivateTarget(@PathVariable Long id) {
-        diversityTargetService.deactivateTarget(id);
+    @GetMapping
+    public List<DiversityTarget> getAll() {
+        return service.getAll();
     }
 }
