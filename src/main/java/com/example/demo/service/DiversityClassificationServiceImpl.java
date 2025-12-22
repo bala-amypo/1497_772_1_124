@@ -20,6 +20,25 @@ public class DiversityClassificationServiceImpl implements DiversityClassificati
     }
     
     @Override
+    @Transactional
+    public DiversityClassification createClassification(DiversityClassification classification) {
+        // Validate code
+        if (classification.getCode() == null || classification.getCode().trim().isEmpty()) {
+            throw new IllegalArgumentException("Classification code is required");
+        }
+        
+        // Convert code to uppercase
+        classification.setCode(classification.getCode().toUpperCase());
+        
+        // Set active if null
+        if (classification.getActive() == null) {
+            classification.setActive(true);
+        }
+        
+        return classificationRepository.save(classification);
+    }
+    
+    @Override
     public List<DiversityClassification> getAllClassifications() {
         return classificationRepository.findAll();
     }
