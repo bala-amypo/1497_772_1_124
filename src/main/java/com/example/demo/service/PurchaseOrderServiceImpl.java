@@ -9,24 +9,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PurchaseOrderServiceImpl implements PurchaseOrderService {
+public class PurchaseOrderServiceImpl
+        implements PurchaseOrderService {
 
-    private final PurchaseOrderRepository repo;
+    private final PurchaseOrderRepository repository;
 
-    public PurchaseOrderServiceImpl(PurchaseOrderRepository repo) {
-        this.repo = repo;
+    public PurchaseOrderServiceImpl(PurchaseOrderRepository repository) {
+        this.repository = repository;
     }
 
+    @Override
     public PurchaseOrder save(PurchaseOrder order) {
-        return repo.save(order);
+        return repository.save(order);
     }
 
+    @Override
     public PurchaseOrder getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Purchase order not found"));
+        return repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("PurchaseOrder not found"));
     }
 
+    @Override
     public List<PurchaseOrder> getAll() {
-        return repo.findAll();
+        return repository.findAll();
     }
 }
