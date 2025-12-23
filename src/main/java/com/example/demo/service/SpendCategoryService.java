@@ -4,7 +4,7 @@ import com.example.demo.entity.SpendCategory;
 import java.util.List;
 
 public interface SpendCategoryService {
-    SpendCategory save(SpendCategory category);
-    SpendCategory getById(Long id);
-    List<SpendCategory> getAll();
+    SpendCategory createCategory(SpendCategory category);
+    List<SpendCategory> getAllCategories();
+    void deactivateCategory(Long id);
 }

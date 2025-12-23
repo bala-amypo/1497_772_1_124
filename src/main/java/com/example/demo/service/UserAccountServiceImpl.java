@@ -1,32 +1,40 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserAccountServiceImpl implements UserAccountService {
-
-    private final UserAccountRepository repo;
-
-    public UserAccountServiceImpl(UserAccountRepository repo) {
-        this.repo = repo;
+    
+    private final UserAccountRepository userAccountRepository;
+    private final PasswordEncoder passwordEncoder;
+    
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, 
+                                 PasswordEncoder passwordEncoder) {
+        this.userAccountRepository = userAccountRepository;
+        this.passwordEncoder = passwordEncoder;
     }
-
-    public UserAccount save(UserAccount user) {
-        return repo.save(user);
-    }
-
-    public UserAccount getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-    }
-
-    public List<UserAccount> getAll() {
-        return repo.findAll();
-    }
-}
+    
+    @Override
+    public UserAccount register(UserAccount user) {
+        // Check if email already exists
+        if (userAccountRepository.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email already registered");
+        }
+        
+        // Set default role if not provided
+        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
+            user.setRole("USER");
+        }
+        
+        // Encode password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        
+        return userAccountRepository.save(user

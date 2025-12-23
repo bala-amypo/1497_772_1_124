@@ -5,28 +5,38 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.SpendCategoryRepository;
 import com.example.demo.service.SpendCategoryService;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
 public class SpendCategoryServiceImpl implements SpendCategoryService {
-
-    private final SpendCategoryRepository repo;
-
-    public SpendCategoryServiceImpl(SpendCategoryRepository repo) {
-        this.repo = repo;
+    
+    private final SpendCategoryRepository categoryRepository;
+    
+    public SpendCategoryServiceImpl(SpendCategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
     }
-
-    public SpendCategory save(SpendCategory category) {
-        return repo.save(category);
+    
+    @Override
+    public SpendCategory createCategory(SpendCategory category) {
+        if (categoryRepository.findByName(category.getName()).isPresent()) {
+            throw new RuntimeException("Category with this name already exists");
+        }
+        return categoryRepository.save(category);
     }
-
-    public SpendCategory getById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<SpendCategory> getAllCategories() {
+        return categoryRepository.findAll();
     }
-
-    public List<SpendCategory> getAll() {
-        return repo.findAll();
+    
+    @Override
+    public void deactivateCategory(Long id) {
+        SpendCategory category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+        category.setActive(false);
+        categoryRepository.save(category);
     }
 }
