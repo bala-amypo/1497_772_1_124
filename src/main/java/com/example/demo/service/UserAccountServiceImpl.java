@@ -12,38 +12,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 public class UserAccountServiceImpl implements UserAccountService {
-    
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, 
-                                 PasswordEncoder passwordEncoder) {
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
     }
     
     @Override
     public UserAccount register(UserAccount user) {
-        // Check if email already exists
         if (userAccountRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already registered");
         }
-        
-        // Set default role if not provided
         if (user.getRole() == null || user.getRole().trim().isEmpty()) {
             user.setRole("USER");
         }
-        
-        // Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        
         return userAccountRepository.save(user);
     }
     
     @Override
     @Transactional(readOnly = true)
     public UserAccount findByEmailOrThrow(String email) {
-        return userAccountRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return userAccountRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Supplier;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.SupplierRepository;
 import com.example.demo.service.SupplierService;
@@ -22,11 +23,11 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier createSupplier(Supplier supplier) {
         if (supplierRepository.existsByEmail(supplier.getEmail())) {
-            throw new RuntimeException("Supplier with this email already exists");
+            throw new BadRequestException("Supplier with this email already exists");
         }
         
         if (supplierRepository.findByRegistrationNumber(supplier.getRegistrationNumber()).isPresent()) {
-            throw new RuntimeException("Supplier with this registration number already exists");
+            throw new BadRequestException("Supplier with this registration number already exists");
         }
         
         return supplierRepository.save(supplier);

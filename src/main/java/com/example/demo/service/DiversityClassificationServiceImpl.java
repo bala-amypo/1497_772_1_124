@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.DiversityClassification;
+import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.DiversityClassificationRepository;
 import com.example.demo.service.DiversityClassificationService;
@@ -21,7 +22,7 @@ public class DiversityClassificationServiceImpl implements DiversityClassificati
     @Override
     public DiversityClassification createClassification(DiversityClassification classification) {
         if (classificationRepository.findByCode(classification.getCode()).isPresent()) {
-            throw new RuntimeException("Classification with this code already exists");
+            throw new BadRequestException("Classification with this code already exists");
         }
         return classificationRepository.save(classification);
     }
