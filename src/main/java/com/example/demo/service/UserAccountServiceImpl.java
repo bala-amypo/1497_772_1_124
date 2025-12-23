@@ -37,4 +37,13 @@ public class UserAccountServiceImpl implements UserAccountService {
         // Encode password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         
-        return userAccountRepository.save(user
+        return userAccountRepository.save(user);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public UserAccount findByEmailOrThrow(String email) {
+        return userAccountRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    }
+}
