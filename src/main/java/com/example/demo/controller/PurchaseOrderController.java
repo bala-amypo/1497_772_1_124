@@ -1,36 +1,44 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.PurchaseOrder;
-import com.example.demo.service.PurchaseOrderService;
+import com.example.demo.entity.SpendCategory;
+import com.example.demo.service.SpendCategoryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
-@RequestMapping("/purchase-orders")
-public class PurchaseOrderController {
-    
-    private final PurchaseOrderService purchaseOrderService;
-    
-    public PurchaseOrderController(PurchaseOrderService purchaseOrderService) {
-        this.purchaseOrderService = purchaseOrderService;
+@RequestMapping("/api/categories")
+public class SpendCategoryController {
+
+    private final SpendCategoryService categoryService;
+
+    public SpendCategoryController(SpendCategoryService categoryService) {
+        this.categoryService = categoryService;
     }
-    
+
     @PostMapping
-    public ResponseEntity<PurchaseOrder> createPurchaseOrder(@RequestBody PurchaseOrder order) {
-        PurchaseOrder created = purchaseOrderService.createPurchaseOrder(order);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<SpendCategory> createCategory(@RequestBody SpendCategory category) {
+        SpendCategory created = categoryService.createCategory(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
-    
-    @GetMapping("/supplier/{supplierId}")
-    public ResponseEntity<List<PurchaseOrder>> getOrdersBySupplier(@PathVariable Long supplierId) {
-        List<PurchaseOrder> orders = purchaseOrderService.getPurchaseOrdersBySupplier(supplierId);
-        return ResponseEntity.ok(orders);
+
+    @GetMapping("/active")
+    public ResponseEntity<List<SpendCategory>> getActiveCategories() {
+        List<SpendCategory> categories = categoryService.getActiveCategories();
+        return ResponseEntity.ok(categories);
     }
-    
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<PurchaseOrder>> getOrdersByCategory(@PathVariable Long categoryId) {
-        List<PurchaseOrder> orders = purchaseOrderService.getOrdersByCategory(categoryId);
-        return ResponseEntity.ok(orders);
+
+    @GetMapping
+    public ResponseEntity<List<SpendCategory>> getAllCategories() {
+        List<SpendCategory> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivateCategory(@PathVariable Long id) {
+        categoryService.deactivateCategory(id);
+        return ResponseEntity.noContent().build();
     }
 }
