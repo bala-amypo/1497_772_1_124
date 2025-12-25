@@ -2,43 +2,26 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.DiversityClassification;
 import com.example.demo.service.DiversityClassificationService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/classifications")
 public class DiversityClassificationController {
-
-    private final DiversityClassificationService classificationService;
-
-    public DiversityClassificationController(DiversityClassificationService classificationService) {
-        this.classificationService = classificationService;
+    private final DiversityClassificationService service;
+    
+    public DiversityClassificationController(DiversityClassificationService service) {
+        this.service = service;
     }
-
+    
     @PostMapping
     public ResponseEntity<DiversityClassification> createClassification(@RequestBody DiversityClassification classification) {
-        DiversityClassification created = classificationService.createClassification(classification);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        return ResponseEntity.ok(service.createClassification(classification));
     }
-
+    
     @GetMapping("/active")
     public ResponseEntity<List<DiversityClassification>> getActiveClassifications() {
-        List<DiversityClassification> classifications = classificationService.getActiveClassifications();
-        return ResponseEntity.ok(classifications);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<DiversityClassification>> getAllClassifications() {
-        List<DiversityClassification> classifications = classificationService.getAllClassifications();
-        return ResponseEntity.ok(classifications);
-    }
-
-    @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivateClassification(@PathVariable Long id) {
-        classificationService.deactivateClassification(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(service.getActiveClassifications());
     }
 }
