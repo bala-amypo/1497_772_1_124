@@ -2,13 +2,10 @@ package com.example.demo.repository;
 
 import com.example.demo.entity.PurchaseOrder;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
-@Repository
 public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Long> {
+    List<PurchaseOrder> findBySupplierId(Long supplierId);
+    List<PurchaseOrder> findByCategoryId(Long categoryId);
     List<PurchaseOrder> findBySupplier_Id(Long supplierId);
-    List<PurchaseOrder> findByCategory_Id(Long categoryId);
-    List<PurchaseOrder> findAll();
 }

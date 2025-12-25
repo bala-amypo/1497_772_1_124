@@ -13,22 +13,22 @@ import java.util.Collections;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
+    
     private final UserAccountRepository userAccountRepository;
-
+    
     public CustomUserDetailsService(UserAccountRepository userAccountRepository) {
         this.userAccountRepository = userAccountRepository;
     }
-
+    
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserAccount userAccount = userAccountRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
         
-        return new User(
-                userAccount.getEmail(),
-                userAccount.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userAccount.getRole()))
-        );
+        return User.builder()
+                .username(userAccount.getEmail())
+                .password(userAccount.getPassword())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userAccount.getRole())))
+                .build();
     }
 }
