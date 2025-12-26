@@ -23,8 +23,22 @@ public class DiversityClassificationServiceImpl implements DiversityClassificati
     }
     
     @Override
-    public List<DiversityClassification> getActiveClassifications() {
-        return repository.findByActiveTrue();
+    public DiversityClassification updateClassification(Long id, DiversityClassification classification) {
+        DiversityClassification existing = getClassificationById(id);
+        existing.setCode(classification.getCode());
+        existing.setDescription(classification.getDescription());
+        return repository.save(existing);
+    }
+    
+    @Override
+    public DiversityClassification getClassificationById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Classification not found"));
+    }
+    
+    @Override
+    public List<DiversityClassification> getAllClassifications() {
+        return repository.findAll();
     }
     
     @Override

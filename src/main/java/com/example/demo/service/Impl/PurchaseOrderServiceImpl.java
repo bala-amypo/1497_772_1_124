@@ -62,14 +62,30 @@ public class PurchaseOrderServiceImpl implements PurchaseOrderService {
         
         return purchaseOrderRepository.save(order);
     }
+    @Override
+    public PurchaseOrder updatePurchaseOrder(Long id, PurchaseOrder order) {
+        PurchaseOrder existing = getPurchaseOrderById(id);
+        existing.setPoNumber(order.getPoNumber());
+        existing.setAmount(order.getAmount());
+        existing.setDateIssued(order.getDateIssued());
+        existing.setApprovedBy(order.getApprovedBy());
+        existing.setNotes(order.getNotes());
+        return purchaseOrderRepository.save(existing);
+    }
+    
+    @Override
+    public PurchaseOrder getPurchaseOrderById(Long id) {
+        return purchaseOrderRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Purchase Order not found"));
+    }
+    
+    @Override
+    public List<PurchaseOrder> getAllPurchaseOrders() {
+        return purchaseOrderRepository.findAll();
+    }
     
     @Override
     public List<PurchaseOrder> getPurchaseOrdersBySupplier(Long supplierId) {
         return purchaseOrderRepository.findBySupplier_Id(supplierId);
-    }
-    
-    @Override
-    public List<PurchaseOrder> getPurchaseOrdersByCategory(Long categoryId) {
-        return purchaseOrderRepository.findByCategoryId(categoryId);
     }
 }
