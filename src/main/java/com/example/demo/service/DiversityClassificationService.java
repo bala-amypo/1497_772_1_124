@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface DiversityClassificationService {
     DiversityClassification createClassification(DiversityClassification classification);
-    List<DiversityClassification> getActiveClassifications();
+    DiversityClassification updateClassification(Long id, DiversityClassification classification);
+    DiversityClassification getClassificationById(Long id);
+    List<DiversityClassification> getAllClassifications();
     DiversityClassification deactivateClassification(Long id);
 }
