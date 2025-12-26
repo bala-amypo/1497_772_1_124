@@ -63,6 +63,7 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 "/v3/api-docs/**",
                 "/suppliers/**"
             ).permitAll()
+            .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
             .anyRequest().authenticated()
         )
         .authenticationProvider(authenticationProvider())
@@ -70,5 +71,6 @@ public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
     return http.build();
 }
+
 
 }
