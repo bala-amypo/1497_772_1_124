@@ -20,14 +20,19 @@ public class SupplierController {
         return ResponseEntity.ok(supplierService.createSupplier(supplier));
     }
     
-    @GetMapping
-    public ResponseEntity<List<Supplier>> getAllSuppliers() {
-        return ResponseEntity.ok(supplierService.getAllSuppliers());
+    @PutMapping("/{id}")
+    public ResponseEntity<Supplier> updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier) {
+        return ResponseEntity.ok(supplierService.updateSupplier(id, supplier));
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<Supplier> getSupplier(@PathVariable Long id) {
         return ResponseEntity.ok(supplierService.getSupplierById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<Supplier>> getAllSuppliers() {
+        return ResponseEntity.ok(supplierService.getAllSuppliers());
     }
     
     @PutMapping("/{id}/deactivate")

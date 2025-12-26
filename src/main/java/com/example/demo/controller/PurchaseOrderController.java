@@ -20,13 +20,23 @@ public class PurchaseOrderController {
         return ResponseEntity.ok(service.createPurchaseOrder(order));
     }
     
+    @PutMapping("/{id}")
+    public ResponseEntity<PurchaseOrder> updatePurchaseOrder(@PathVariable Long id, @RequestBody PurchaseOrder order) {
+        return ResponseEntity.ok(service.updatePurchaseOrder(id, order));
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<PurchaseOrder> getPurchaseOrderById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getPurchaseOrderById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<PurchaseOrder>> getAllPurchaseOrders() {
+        return ResponseEntity.ok(service.getAllPurchaseOrders());
+    }
+    
     @GetMapping("/supplier/{supplierId}")
     public ResponseEntity<List<PurchaseOrder>> getOrdersBySupplier(@PathVariable Long supplierId) {
         return ResponseEntity.ok(service.getPurchaseOrdersBySupplier(supplierId));
-    }
-    
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<PurchaseOrder>> getOrdersByCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(service.getPurchaseOrdersByCategory(categoryId));
     }
 }

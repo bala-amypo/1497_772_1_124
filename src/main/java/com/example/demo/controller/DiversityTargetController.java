@@ -20,8 +20,23 @@ public class DiversityTargetController {
         return ResponseEntity.ok(service.createTarget(target));
     }
     
-    @GetMapping("/active")
-    public ResponseEntity<List<DiversityTarget>> getActiveTargets() {
-        return ResponseEntity.ok(service.getActiveTargets());
+    @PutMapping("/{id}")
+    public ResponseEntity<DiversityTarget> updateTarget(@PathVariable Long id, @RequestBody DiversityTarget target) {
+        return ResponseEntity.ok(service.updateTarget(id, target));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<DiversityTarget>> getAllTargets() {
+        return ResponseEntity.ok(service.getAllTargets());
+    }
+    
+    @GetMapping("/year/{year}")
+    public ResponseEntity<List<DiversityTarget>> getTargetsByYear(@PathVariable Integer year) {
+        return ResponseEntity.ok(service.getTargetsByYear(year));
+    }
+    
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<DiversityTarget> deactivateTarget(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deactivateTarget(id));
     }
 }

@@ -20,8 +20,23 @@ public class SpendCategoryController {
         return ResponseEntity.ok(service.createCategory(category));
     }
     
-    @GetMapping("/active")
-    public ResponseEntity<List<SpendCategory>> getActiveCategories() {
-        return ResponseEntity.ok(service.getActiveCategories());
+    @PutMapping("/{id}")
+    public ResponseEntity<SpendCategory> updateCategory(@PathVariable Long id, @RequestBody SpendCategory category) {
+        return ResponseEntity.ok(service.updateCategory(id, category));
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<SpendCategory> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getCategoryById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<SpendCategory>> getAllCategories() {
+        return ResponseEntity.ok(service.getAllCategories());
+    }
+    
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<SpendCategory> deactivateCategory(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deactivateCategory(id));
     }
 }

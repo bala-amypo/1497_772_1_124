@@ -20,8 +20,23 @@ public class DiversityClassificationController {
         return ResponseEntity.ok(service.createClassification(classification));
     }
     
-    @GetMapping("/active")
-    public ResponseEntity<List<DiversityClassification>> getActiveClassifications() {
-        return ResponseEntity.ok(service.getActiveClassifications());
+    @PutMapping("/{id}")
+    public ResponseEntity<DiversityClassification> updateClassification(@PathVariable Long id, @RequestBody DiversityClassification classification) {
+        return ResponseEntity.ok(service.updateClassification(id, classification));
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<DiversityClassification> getClassificationById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getClassificationById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<DiversityClassification>> getAllClassifications() {
+        return ResponseEntity.ok(service.getAllClassifications());
+    }
+    
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<DiversityClassification> deactivateClassification(@PathVariable Long id) {
+        return ResponseEntity.ok(service.deactivateClassification(id));
     }
 }

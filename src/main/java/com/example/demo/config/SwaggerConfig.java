@@ -21,7 +21,7 @@ public class SwaggerConfig {
                         .version("1.0")
                         .description("API for managing supplier diversity tracking"))
                 .servers(List.of(
-                        new Server().url("https://9021.pro604cr.amypo.ai/").description("Development Server")
+                        new Server().url("https://9077.32procr.amypo.ai/").description("Development Server")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
                 .components(new io.swagger.v3.oas.models.Components()
