@@ -23,6 +23,16 @@ public class SupplierServiceImpl implements SupplierService {
     }
     
     @Override
+    public Supplier updateSupplier(Long id, Supplier supplier) {
+        Supplier existing = getSupplierById(id);
+        existing.setName(supplier.getName());
+        existing.setEmail(supplier.getEmail());
+        existing.setPhone(supplier.getPhone());
+        existing.setAddress(supplier.getAddress());
+        return supplierRepository.save(existing);
+    }
+    
+    @Override
     public Supplier getSupplierById(Long id) {
         return supplierRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Supplier not found"));
