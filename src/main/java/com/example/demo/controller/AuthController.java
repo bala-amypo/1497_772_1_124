@@ -14,63 +14,47 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
-
     private final UserAccountService userAccountService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-
-    public AuthController(UserAccountService userAccountService,
-                          AuthenticationManager authenticationManager,
-                          JwtUtil jwtUtil) {
+    
+    public AuthController(UserAccountService userAccountService, 
+                         AuthenticationManager authenticationManager,
+                         JwtUtil jwtUtil) {
         this.userAccountService = userAccountService;
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
-
+    
     @PostMapping("/register")
-    public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest req) {
-
+    public ResponseEntity<JwtResponse> register(@RequestBody RegisterRequest request) {
         UserAccount user = new UserAccount();
-        user.setFullName(req.getFullName());
-        user.setEmail(req.getEmail());
-        user.setPassword(req.getPassword());
-        user.setRole(req.getRole());
-
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setPassword(request.getPassword());
+        user.setRole(request.getRole());
+        
         UserAccount saved = userAccountService.register(user);
-
-        String token = jwtUtil.generateToken(
-                saved.getId(),
-                saved.getEmail(),
-                saved.getRole()
-        );
-
+        String token = jwtUtil.generateToken(saved.getId(), saved.getEmail(), saved.getRole());
+        
         return ResponseEntity.ok(new JwtResponse(token));
     }
-
+    
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest req) {
-
+    public ResponseEntity<JwtResponse> login(@RequestBody LoginRequest request) {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            req.getEmail(),
-                            req.getPassword()
-                    )
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-        } catch (BadCredentialsException ex) {
+            
+            UserAccount user = userAccountService.findByEmailOrThrow(request.getEmail());
+            String token = jwtUtil.generateToken(user.getId(), user.getEmail(), user.getRole());
+            
+            return ResponseEntity.ok(new JwtResponse(token));
+        } catch (BadCredentialsException e) {
             throw new UnauthorizedException("Invalid credentials");
         }
-
-        UserAccount user = userAccountService.findByEmailOrThrow(req.getEmail());
-
-        String token = jwtUtil.generateToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()
-        );
-
-        return ResponseEntity.ok(new JwtResponse(token));
     }
 }
