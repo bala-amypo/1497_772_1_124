@@ -26,13 +26,12 @@ public class JwtUtil {
         this.expirationTime = expirationTime;
     }
 
-    // ✅ REQUIRED BY SPRING (@Component)
     public JwtUtil() {
         this.signingKey = Keys.hmacShaKeyFor(DEFAULT_SECRET.getBytes());
         this.expirationTime = DEFAULT_EXPIRATION;
     }
 
-    // ================= TOKEN GENERATION =================
+  
 
     public String generateToken(Long userId, String email, String role) {
         return Jwts.builder()
